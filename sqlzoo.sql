@@ -180,3 +180,70 @@ SELECT continent, COUNT(name) FROM world
 -- Question 8
 SELECT continent FROM world 
   GROUP BY continent HAVING SUM(population) >= 100000000;
+
+-- The JOIN operation
+
+-- Question 1
+SELECT matchid, player FROM goal 
+  WHERE teamid = 'GER'; 
+-- Question 2
+SELECT id,stadium,team1,team2
+  FROM game 
+    INNER JOIN goal 
+     ON game.id = goal.matchid
+      WHERE player = 'Lars Bender';
+-- Question 3
+SELECT player, teamid, stadium, mdate
+  FROM game JOIN goal ON (id=matchid)
+    WHERE teamid = 'GER';
+-- Question 4
+SELECT team1, team2, player 
+  FROM game JOIN goal ON (id=matchid)
+    WHERE player LIKE 'Mario%';
+-- Question 5
+SELECT player, teamid, coach, gtime
+  FROM eteam JOIN goal ON (teamid=id) 
+    WHERE gtime<=10;
+-- Question 6
+SELECT mdate, teamname 
+  FROM game JOIN eteam ON (team1=eteam.id)
+    WHERE coach = 'Fernando Santos';
+-- Question 7
+SELECT player FROM goal 
+  JOIN game ON (id=matchid)
+    WHERE stadium = 'National Stadium, Warsaw'; 
+-- Question 8
+SELECT DISTINCT player
+  FROM game JOIN goal ON matchid = id 
+    WHERE ((team1='GER' OR team2='GER') AND teamid != 'GER');
+-- Question 9
+SELECT teamname, COUNT(player)
+  FROM eteam JOIN goal ON id=teamid
+ GROUP BY teamname;
+-- Question 10
+SELECT stadium, COUNT(player)
+  FROM game JOIN goal ON id = matchid
+    GROUP BY stadium;
+-- Question 11
+SELECT game.id, mdate, COUNT(*)
+  FROM game JOIN goal ON matchid = id 
+   WHERE (team1 = 'POL' OR team2 = 'POL')
+     GROUP BY id, mdate
+       ORDER BY id;
+-- Question 12
+SELECT id, mdate, COUNT(player)
+  FROM game JOIN goal ON matchid = id
+   WHERE teamid = 'GER'
+    GROUP BY id, mdate;
+-- Question 13
+SELECT game.mdate, game.team1, 
+  SUM(CASE WHEN goal.teamid = game.team1 THEN 1 ELSE 0 END) 
+  AS score1,
+  game.team2, 
+  SUM(CASE WHEN goal.teamid = game.team2 THEN 1 ELSE 0 END) 
+  AS score2
+    FROM game JOIN goal ON (game.id = goal.matchid)
+      GROUP BY mdate,  game.id, team1, team2 
+        ORDER BY mdate, matchid, team1, team2;
+
+
