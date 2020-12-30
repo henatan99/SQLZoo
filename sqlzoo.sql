@@ -152,3 +152,31 @@ SELECT name, continent, population FROM world x
 SELECT name, continent FROM world x
   WHERE population/3 > ALL(SELECT population FROM world y
     WHERE y.continent = x.continent AND population > 0 AND y.name != x.name); 
+
+
+-- SUM and COUNT
+
+-- Question 1
+SELECT SUM(population)
+FROM world
+-- Question 2
+SELECT DISTINCT continent FROM world 
+-- Question 3
+SELECT SUM(gdp) FROM world 
+  WHERE continent = 'Africa';
+-- Question 4
+SELECT COUNT(area) FROM world 
+  WHERE area >= 1000000;
+-- Question 5
+SELECT SUM(population) FROM world
+  WHERE name IN ('Estonia', 'Latvia', 'Lithuania'); 
+-- Question 6
+SELECT continent, COUNT(name) FROM world 
+  GROUP BY continent HAVING COUNT(name) > 0;
+-- Question 7
+SELECT continent, COUNT(name) FROM world
+  WHERE population > 10000000 
+    GROUP BY continent HAVING COUNT(name) > 0;
+-- Question 8
+SELECT continent FROM world 
+  GROUP BY continent HAVING SUM(population) >= 100000000;
