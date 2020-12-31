@@ -325,4 +325,48 @@ SELECT a.name
      JOIN casting ON casting.actorid = actor.id
          WHERE actor.name != 'Art Garfunkel') as a ON m.id = a.movieid;
 
+-- NULL, INNER JOIN, LEFT JOIN, RIGHT JOIN
+
+-- Question 1
+SELECT name FROM teacher 
+  WHERE dept IS NULL;
+-- Question 2
+SELECT teacher.name, dept.name
+ FROM teacher INNER JOIN dept
+           ON (teacher.dept=dept.id);
+-- Question 3
+SELECT teacher.name, dept.name
+ FROM teacher LEFT JOIN dept
+           ON (teacher.dept=dept.id);
+-- Question 4
+SELECT teacher.name, dept.name
+ FROM teacher RIGHT JOIN dept
+           ON (teacher.dept=dept.id);
+-- Question 5
+SELECT teacher.name, COALESCE(mobile,'07986 444 2266')  
+  FROM teacher;
+-- Question 6
+SELECT teacher.name, COALESCE(dept.name, 'None')
+ FROM teacher LEFT JOIN dept
+           ON (teacher.dept=dept.id);
+-- Question 7
+SELECT COUNT(teacher.name), COUNT(teacher.mobile)
+  FROM teacher;
+-- Question 8
+SELECT dept.name, COUNT(teacher.name) FROM teacher
+  RIGHT JOIN dept ON teacher.dept = dept.id 
+    GROUP BY dept.name;
+-- Question 9
+SELECT teacher.name,
+  CASE WHEN dept = 1 OR dept = 2 THEN 'Sci' 
+  ELSE 'Art' END AS department
+FROM teacher
+-- Question 10
+SELECT teacher.name,
+  CASE 
+    WHEN dept IS NULL THEN 'None'
+    WHEN dept = 3 THEN 'Sci'
+    ELSE 'Sci'
+  END AS department 
+FROM teacher
 
