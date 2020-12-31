@@ -370,3 +370,61 @@ SELECT teacher.name,
   END AS department 
 FROM teacher
 
+-- Self join
+
+-- Question 1
+SELECT COUNT(*) FROM stops;
+-- Question 2
+SELECT id FROM stops 
+  WHERE name = 'Craiglockhart';
+-- Question 3
+SELECT id, name FROM stops
+   JOIN route ON stop = stops.id 
+     WHERE route.num = 4
+      ORDER BY pos;
+-- Question 4
+SELECT company, num, COUNT(*)
+FROM route WHERE stop=149 OR stop=53
+GROUP BY company, num having COUNT(*) = 2;
+-- Question 5
+SELECT a.company, a.num, a.stop, b.stop
+FROM route a JOIN route b ON
+  (a.company=b.company AND a.num=b.num)
+WHERE a.stop=53 AND b.stop = 149;
+-- Question 6
+SELECT a.company, a.num, stopa.name, stopb.name
+FROM route a JOIN route b ON
+  (a.company=b.company AND a.num=b.num)
+  JOIN stops stopa ON (a.stop=stopa.id)
+  JOIN stops stopb ON (b.stop=stopb.id)
+WHERE stopa.name='Craiglockhart' AND stopb.name='London Road';
+-- Question 7
+SELECT DISTINCT a.company, a.num
+FROM route a JOIN route b ON
+  (a.company=b.company AND a.num=b.num)
+  JOIN stops stopa ON (a.stop=stopa.id)
+  JOIN stops stopb ON (b.stop=stopb.id)
+WHERE stopa.name='Haymarket' AND stopb.name='Leith';
+-- Question 8
+SELECT DISTINCT a.company, a.num
+FROM route a JOIN route b ON
+  (a.company=b.company AND a.num=b.num)
+  JOIN stops stopa ON (a.stop=stopa.id)
+  JOIN stops stopb ON (b.stop=stopb.id)
+WHERE stopa.name='Craiglockhart' AND stopb.name='Tollcross';
+-- Question 9
+SELECT DISTINCT bstop.name, a.company, a.num FROM
+	route AS a JOIN route AS b ON (a.company = b.company AND a.num = b.num)
+   JOIN stops AS astop ON (a.stop = astop.id)
+   JOIN stops AS bstop ON (b.stop = bstop.id)
+	WHERE astop.name = 'Craiglockhart'
+-- Question 10
+SELECT a.num, a.company, bstop.name, c.num, c.company FROM 
+  route AS a JOIN route AS b ON (a.company = b.company AND a.num = b.num)
+    JOIN route AS c ON (b.stop = c.stop)
+    JOIN route AS d ON (c.company = d.company AND c.num = d.num)
+    JOIN stops AS astop ON (a.stop = astop.id)
+    JOIN stops AS bstop ON (b.stop = bstop.id)
+    JOIN stops AS cstop ON (c.stop = cstop.id)
+    JOIN stops AS dstop ON (d.stop = dstop.id)
+	WHERE astop.name = 'Craiglockhart' AND dstop.name = 'Sighthill' AND bstop.id = cstop.id;
